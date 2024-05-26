@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace screenPerspective
@@ -17,9 +18,15 @@ namespace screenPerspective
         [SerializeField] private Camera physicalCamera;
         [SerializeField] private Transform eyeTracker;
         private float _fov=1;
+        
+        private float _widthMultiplicator = 1;
+        private float _heightMultiplicator = 1;
 
-
-    
+        private void Start()
+        {
+            _heightMultiplicator = (Vector3.Distance(screenCenter.position,screenVerticalBorderUp.position) * - 2);
+            _widthMultiplicator = (Vector3.Distance(screenCenter.position,screenHorizontalBorderRight.position) * -2);
+        }
 
 
         public void CalculateFov()
@@ -45,9 +52,9 @@ namespace screenPerspective
             forLensShiftX.localPosition = new Vector3( cameraTransform.x,0, 0);
         
             var centerPosition = screenCenter.position;
-        
-            float lensShiftY = forLensShiftY.localPosition.y / (Vector3.Distance(centerPosition,screenVerticalBorderUp.position) * - 2);
-            float lensShiftX = forLensShiftX.localPosition.x /  (Vector3.Distance(centerPosition,screenHorizontalBorderRight.position) * -2);
+
+            float lensShiftY = forLensShiftY.localPosition.y / _heightMultiplicator;
+            float lensShiftX = forLensShiftX.localPosition.x / _widthMultiplicator;
         
             Vector2 lensShift = new Vector2(lensShiftX, lensShiftY);
 

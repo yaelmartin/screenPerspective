@@ -6,6 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/screenPerspective/ScreenPerspectiveScene.unity
+    path: Assets/screenPerspective/ScreenPerspective-NoTracker.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 439f15b3d3acc384899f3a15c41b956e,
+      type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 0395dfa96a5e8ea44a716ab6b3a08953,
+      type: 2}
