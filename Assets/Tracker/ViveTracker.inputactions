@@ -1,0 +1,127 @@
+{
+    "name": "ViveTracker",
+    "maps": [
+        {
+            "name": "ViveTracker",
+            "id": "4b083793-4c70-48c6-a3bb-2474bbb63fc0",
+            "actions": [
+                {
+                    "name": "Position",
+                    "type": "Value",
+                    "id": "9f7e5d96-b5f1-4fe3-8cd7-c4747ece9ac8",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Rotation",
+                    "type": "Value",
+                    "id": "afbcb555-e84e-4a23-919b-e40aff3e034e",
+                    "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Is Tracked",
+                    "type": "Button",
+                    "id": "ddd9dd28-64b7-4985-a632-431bf52c4da7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Tracking State",
+                    "type": "Value",
+                    "id": "a301a4e2-1530-4f55-ba4c-84e94e7713d4",
+                    "expectedControlType": "Integer",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "10130d76-c3c7-4027-ae40-07025892150c",
+                    "path": "<XRTracker>/devicePosition",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Quaternion Fallback",
+                    "id": "3c40833c-2fee-48ac-b875-e84159804e92",
+                    "path": "QuaternionFallback",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotation",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "first",
+                    "id": "eabe85d1-5516-48c9-a45d-8b691e972c9e",
+                    "path": "<XRTracker>/deviceRotation",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "second",
+                    "id": "7afa7eb1-c289-40ba-9f02-8635c11a6999",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "third",
+                    "id": "735ad3fb-f0dd-48b0-b970-03b15340d98d",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rotation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "ea17b3a4-ab44-4903-8584-21c4d5f75149",
+                    "path": "<XRTracker>/isTracked",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Is Tracked",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "09fc75ac-a70f-4552-a6e8-0ea9b184687a",
+                    "path": "<XRTracker>/trackingState",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tracking State",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
