@@ -1,91 +1,103 @@
-using System;
 using System.IO;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem.XR;
+using UnityEngine.Serialization;
 
 namespace Tracker
 {
-    public struct TrackerParameters
+    /// <summary>
+    /// Used to calibrate a irl object and a tracker
+    /// </summary>
+    public class TrackerOperations : TrackerConfigLoader
     {
-        public float Degree;
-        public Vector3 TrackerOriginOffset;
-
-        public TrackerParameters(int dummyInt)
-        {
-            Degree = 0;
-            TrackerOriginOffset = Vector3.zero;
-        }
-    }
-    public class TrackerOperations : MonoBehaviour
-    {
-        [SerializeField] private Transform trackerOrigin;
-        [SerializeField] private Transform tracker;
+        [SerializeField] private Transform targetedTracker;
+        [SerializeField] private Transform originRoomScale;
         [SerializeField] private Transform spawn;
-        [SerializeField] private ActionBasedController trackerActionBasedController;
+        private TrackedPoseDriver _trackerTrackedPoseDriver;
         
-        private string _filePath = Path.Combine(Application.streamingAssetsPath, "trackerParameters.json");
-        private TrackerParameters _trackerParameters;
+        private Vector3 _initialIrlObjectWithTrackerPosition;
+        private Quaternion _initialIrlObjectWithTrackerRotation;
         
         public void RecenterTrackerToSpawn()
         {
             Vector3 offset = spawn.transform.position;
-            offset = offset - (tracker.position - trackerOrigin.position);
-            trackerOrigin.position = offset;
-            _trackerParameters.TrackerOriginOffset = offset;
+            offset = offset - (Tracker.position - originRoomScale.position);
+            originRoomScale.position = offset;
+
+            TrackerParameters.TrackerOriginOffset = offset;
+
+            UnParentIrlObjectAndReparent();
+        }
+
+        //must be called when the Tracker is Recentered first and hasn't moved since
+        public void UnParentIrlObjectAndReparent()
+        {
+            irlObjectWithTracker.parent = null;
+            irlObjectWithTracker.position = _initialIrlObjectWithTrackerPosition;
+            irlObjectWithTracker.rotation = _initialIrlObjectWithTrackerRotation;
+            irlObjectWithTracker.SetParent(Tracker,true);
+            
+            //save relative local transform of irlObjectWithTracker
+            TrackerParameters.IrlObjectWithTrackerPosition = irlObjectWithTracker.localPosition;
+            TrackerParameters.IrlObjectWithTrackerRotation = irlObjectWithTracker.localRotation;
         }
         
         public void AlignSpace(float degree)
         {
-            trackerOrigin.rotation=Quaternion.Euler(new Vector3(0,degree,0));
-            _trackerParameters.Degree = degree;
+            originRoomScale.rotation=Quaternion.Euler(new Vector3(0,degree,0));
+            TrackerParameters.Degree = degree;
+        }
+        
+        public void AlignSpaceAndRecenter(float degree)
+        {
+            AlignSpace(degree);
             RecenterTrackerToSpawn();
         }
 
         public void ToggleTracker(bool state)
         {
-            trackerActionBasedController.enabled = state;
-        }
-
-
-        public void Awake()
-        { 
-            LoadParameters();
+            _trackerTrackedPoseDriver.enabled = state;
         }
         
-        public void LoadParameters()
+        private void Awake()
         {
-            if (File.Exists(_filePath))
+            Tracker=targetedTracker;
+            _trackerTrackedPoseDriver = Tracker.GetComponentInParent<TrackedPoseDriver>();
+            
+            SetFilePath();
+            
+            spawn.parent = null;
+            
+            if(irlObjectWithTracker != null)
             {
-                string dataAsJson = File.ReadAllText(_filePath);
-                TrackerParameters parameters = JsonUtility.FromJson<TrackerParameters>(dataAsJson);
-                _trackerParameters = parameters;
-            }
-            else
-            {
-                Debug.Log("File trackerParameters.json not found. Using default Parameters.");
-                _trackerParameters = new TrackerParameters();
+                _initialIrlObjectWithTrackerPosition = irlObjectWithTracker.position;
+                _initialIrlObjectWithTrackerRotation = irlObjectWithTracker.rotation;
             }
             
-            ApplyParameters();
+            LoadParameters();
         }
 
-        public void ApplyParameters()
+        public void LoadParameters()
         {
-            trackerOrigin.position = _trackerParameters.TrackerOriginOffset;
-            trackerOrigin.rotation=Quaternion.Euler(new Vector3(0,_trackerParameters.Degree,0));
+            TrackerParameters=GetParametersFromJson(filePath);
+            
+            originRoomScale.position = TrackerParameters.TrackerOriginOffset;
+            originRoomScale.rotation=Quaternion.Euler(new Vector3(0,TrackerParameters.Degree,0));
+            
+            ParentObjectWithTrackerUsingParameters();
         }
-        
+
         public void SaveParameters()
         {
-            string dataAsJson = JsonUtility.ToJson(_trackerParameters);
-            File.WriteAllText(_filePath, dataAsJson);
+            string dataAsJson = JsonUtility.ToJson(TrackerParameters);
+            File.WriteAllText(filePath, dataAsJson);
         }
 
         public void DeleteParameters()
         {
-            if (File.Exists(_filePath))
+            if (File.Exists(filePath))
             {
-                File.Delete(_filePath);
+                File.Delete(filePath);
                 Debug.Log("File deleted.");
             }
             else
