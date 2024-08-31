@@ -6,13 +6,14 @@ using UnityEngine.Serialization;
 namespace Tracker
 {
     /// <summary>
-    /// Used to calibrate a irl object and a tracker
+    /// Used to align the room-scale area, and calibrate the offset between the tracker and real object
     /// </summary>
     public class TrackerOperations : TrackerConfigLoader
     {
         [SerializeField] private Transform targetedTracker;
         [SerializeField] private Transform originRoomScale;
         [SerializeField] private Transform spawn;
+        private Transform _movableArea;
         private TrackedPoseDriver _trackerTrackedPoseDriver;
         
         private Vector3 _initialIrlObjectWithTrackerPosition;
@@ -21,23 +22,26 @@ namespace Tracker
         public void RecenterTrackerToSpawn()
         {
             Vector3 offset = spawn.transform.position;
-            offset = offset - (Tracker.position - originRoomScale.position);
+            offset -= (Tracker.position - originRoomScale.position);
             originRoomScale.position = offset;
 
-            TrackerParameters.TrackerOriginOffset = offset;
+            TrackerParameters.TrackerOriginOffset = originRoomScale.localPosition;
 
-            UnParentIrlObjectAndReparent();
+            if (irlObjectWithTracker != null)
+            {
+                UnParentIrlObjectAndReparent();  
+            }
         }
 
-        //must be called when the Tracker is Recentered first and hasn't moved since
+        // Must be called when the Tracker is recentered first and hasn't moved since
         public void UnParentIrlObjectAndReparent()
         {
-            irlObjectWithTracker.parent = null;
-            irlObjectWithTracker.position = _initialIrlObjectWithTrackerPosition;
-            irlObjectWithTracker.rotation = _initialIrlObjectWithTrackerRotation;
+            irlObjectWithTracker.SetParent(_movableArea);
+            irlObjectWithTracker.localPosition = _initialIrlObjectWithTrackerPosition;
+            irlObjectWithTracker.localRotation = _initialIrlObjectWithTrackerRotation;
             irlObjectWithTracker.SetParent(Tracker,true);
             
-            //save relative local transform of irlObjectWithTracker
+            // Save relative local transform of irlObjectWithTracker
             TrackerParameters.IrlObjectWithTrackerPosition = irlObjectWithTracker.localPosition;
             TrackerParameters.IrlObjectWithTrackerRotation = irlObjectWithTracker.localRotation;
         }
@@ -63,15 +67,16 @@ namespace Tracker
         {
             Tracker=targetedTracker;
             _trackerTrackedPoseDriver = Tracker.GetComponentInParent<TrackedPoseDriver>();
+            _movableArea = originRoomScale.transform.parent;
             
             SetFilePath();
             
-            spawn.parent = null;
+            spawn.SetParent(_movableArea,true);
             
             if(irlObjectWithTracker != null)
             {
-                _initialIrlObjectWithTrackerPosition = irlObjectWithTracker.position;
-                _initialIrlObjectWithTrackerRotation = irlObjectWithTracker.rotation;
+                _initialIrlObjectWithTrackerPosition = irlObjectWithTracker.localPosition;
+                _initialIrlObjectWithTrackerRotation = irlObjectWithTracker.localRotation;
             }
             
             LoadParameters();
@@ -81,10 +86,13 @@ namespace Tracker
         {
             TrackerParameters=GetParametersFromJson(filePath);
             
-            originRoomScale.position = TrackerParameters.TrackerOriginOffset;
-            originRoomScale.rotation=Quaternion.Euler(new Vector3(0,TrackerParameters.Degree,0));
-            
-            ParentObjectWithTrackerUsingParameters();
+            originRoomScale.localPosition = TrackerParameters.TrackerOriginOffset;
+            originRoomScale.localRotation = Quaternion.Euler(new Vector3(0,TrackerParameters.Degree,0));
+
+            if (irlObjectWithTracker != null)
+            {
+                ParentObjectWithTrackerUsingParameters();
+            }
         }
 
         public void SaveParameters()
@@ -105,6 +113,7 @@ namespace Tracker
                 Debug.Log("No file to delete.");
             }
         }
-
+        
+        public Transform Spawn => spawn;
     }
 }
