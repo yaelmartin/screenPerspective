@@ -1187,14 +1187,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8b8a6e1e8319a4db64e2faa90e2118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  screenScaleMultiplier: {fileID: 182460699}
   screenCenter: {fileID: 182460699}
-  screenVerticalBorderUp: {fileID: 1340267564}
   forFovFront: {fileID: 1102853259}
   forLensShiftY: {fileID: 340309755}
   forLensShiftX: {fileID: 85011282}
+  screenVerticalBorderUp: {fileID: 1340267564}
   screenHorizontalBorderRight: {fileID: 1424190439}
   physicalCamera: {fileID: 846850535}
   eyeTracker: {fileID: 1988471133}
+  screenQuad: {fileID: 0}
+  widthCm: 100
+  heightCm: 100
 --- !u!1 &1102853258
 GameObject:
   m_ObjectHideFlags: 0

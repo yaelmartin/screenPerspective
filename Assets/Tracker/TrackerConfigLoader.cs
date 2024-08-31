@@ -12,7 +12,7 @@ namespace Tracker
     }
     
     /// <summary>
-    /// Retrieves calibration to move a virtual object like the real one
+    /// Applies a saved offset to a real object attached to the tracker (self GO)
     /// </summary>
     public class TrackerConfigLoader : MonoBehaviour
     {
@@ -54,7 +54,6 @@ namespace Tracker
 
         protected void ParentObjectWithTrackerUsingParameters()
         {
-            if (irlObjectWithTracker == null) return;
             irlObjectWithTracker.SetParent(Tracker);
             irlObjectWithTracker.localPosition = TrackerParameters.IrlObjectWithTrackerPosition;
             irlObjectWithTracker.localRotation = TrackerParameters.IrlObjectWithTrackerRotation;
