@@ -160,7 +160,7 @@ using UnityEngine;
                 // Calc acceleration
                 CalculateCurrentIncrease(deltaPosition != Vector3.zero);
 
-                transform.position += deltaPosition * currentSpeed * _currentIncrease;
+                transform.localPosition += deltaPosition * currentSpeed * _currentIncrease;
             }
 
             // Rotation
