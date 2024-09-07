@@ -1,5 +1,5 @@
 {
-    "name": "screenPerspective",
+    "name": "ScreenPerspective",
     "rootNamespace": "",
     "references": [
         "Tracker"

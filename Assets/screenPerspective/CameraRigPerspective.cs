@@ -30,6 +30,7 @@ namespace ScreenPerspective
         private void UpdateFieldOfView()
         {
             fovPivot.localPosition = new Vector3(0f, 0f, physicalCamera.transform.localPosition.z);
+            // Field of View Axis: Vertical
             physicalCamera.fieldOfView = 2f * CalculateAngle(fovPivot.localPosition, Vector3.zero, screenTopEdge.localPosition);
         }
 
