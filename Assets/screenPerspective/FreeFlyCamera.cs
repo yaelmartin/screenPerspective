@@ -5,6 +5,8 @@
 
 using UnityEngine;
 
+namespace ScreenPerspective
+{
     public class FreeFlyCamera : MonoBehaviour
     {
 
@@ -160,7 +162,8 @@ using UnityEngine;
                 // Calc acceleration
                 CalculateCurrentIncrease(deltaPosition != Vector3.zero);
 
-                transform.position += deltaPosition * currentSpeed * _currentIncrease;
+                // Use localPosition or position depending on your needs
+                transform.localPosition += deltaPosition * currentSpeed * _currentIncrease;
             }
 
             // Rotation
@@ -189,4 +192,5 @@ using UnityEngine;
 
 
         } //end update
+    }
 }

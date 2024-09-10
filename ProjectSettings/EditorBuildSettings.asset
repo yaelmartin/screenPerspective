@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/screenPerspective/ScreenPerspective-NoTracker.unity
+  - enabled: 0
+    path: Assets/ScreenPerspective/ScreenPerspective-NoTracker.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/ScreenPerspective/ScreenPerspective_Simulator.unity
+    guid: c765196bbb450484488fe3b1f4840f80
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 439f15b3d3acc384899f3a15c41b956e,
       type: 2}
