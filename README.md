@@ -67,7 +67,8 @@ You can scale up or down the whole setup with ScreenScaleMultiplier.
 ### Using multiple screens
 
 - Make sure to place each CameraRigPerspective accurately (3D scanning can be helpful)
-- Use correct display output for each physical camera in your rigs. You can use [this tool to see the order Unity uses](https://github.com/yaelmartin/unityTargetDisplayOrderDetector)
+- Use the correct display output for each physical camera in your rigs. You can use [this tool to see the order Unity uses](https://github.com/yaelmartin/unityTargetDisplayOrderDetector)
+- Place a ActivateDisplays prefab in your scene
 
 ### Integrating Other Tracking Methods
 

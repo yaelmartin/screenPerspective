@@ -1,6 +1,4 @@
-using PlasticGui.Help;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Tracker;
 
 namespace screenPerspective
